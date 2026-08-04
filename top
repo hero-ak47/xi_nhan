@@ -1,0 +1,24 @@
+module top_module (
+    input wire clk_sys,
+    input wire aresetn,
+    input wire switch,
+
+    output reg[5:0] LED
+);
+
+wire clk_2Hz;
+
+clk_div h1 (
+    .clk_sys(clk_sys),
+    .aresetn(aresetn),
+    .clk_out(clk_2Hz)
+);
+
+xi_nhan h2(
+    .clk_div(clk_2Hz),
+    .aresetn(aresetn),
+    .switch(switch),
+    .LED(LED)
+);
+    
+endmodule
