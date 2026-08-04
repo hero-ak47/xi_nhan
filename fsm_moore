@@ -1,0 +1,90 @@
+module xi_nhan (
+    input wire clk_div,
+    input wire aresetn,
+    input wire switch, // 0 : LEFT & 1 : RIGHT
+
+    output reg[5:0] LED
+);
+
+reg[1:0] state_reg, state_next;
+reg[5:0] LED_reg, LED_next;
+
+always @(posedge clk_div or negedge aresetn) begin
+    if (~aresetn) begin
+        state_reg <= 2'b00;
+        LED_reg   <= 6'b000000;
+    end 
+    else if(aresetn) begin
+        state_reg <= state_next;
+        LED_reg   <= LED_next;
+    end 
+end
+
+always @(*) begin
+    // gia tri mac dinh
+    state_next <= state_reg;
+    LED_next   <= LED_reg;
+
+    if (switch) begin // Re phai
+    case (state_reg)
+        00: begin 
+            LED_next <= 6'b000;
+            state_next <= 2'b01;
+        end
+        01: begin
+            LED_next[2:0] <= 3'b000;
+            LED_next[5:3] <= 3'b001;
+            state_next <= 2'b10;
+        end
+        10: begin
+            LED_next[2:0] <= 3'b000;
+            LED_next[5:3] <= 3'b011;
+            state_next <= 2'b11;
+        end
+        11: begin
+            LED_next[2:0] <= 3'b000;
+            LED_next[5:3] <= 3'b111;
+            state_next <= 2'b00;
+        end
+        default: begin
+                    state_next = 2'b00;
+                    LED_next   = 6'b000000;
+                end
+    endcase
+    end
+
+    if (~switch) begin // Re trai
+    case (state_reg)
+        00: begin 
+            LED_next <= 6'b000;
+            state_next <= 2'b01;
+        end
+        01: begin
+            LED_next[5:3] <= 3'b000;
+            LED_next[2:0] <= 3'b001;
+            state_next <= 2'b10;
+        end
+        10: begin
+            LED_next[5:3] <= 3'b000;
+            LED_next[2:0] <= 3'b011;
+            state_next <= 2'b11;
+        end
+        11: begin
+            LED_next[5:3] <= 3'b000;
+            LED_next[2:0] <= 3'b111;
+            state_next <= 2'b00;
+        end
+        default: begin
+                    state_next = 2'b00;
+                    LED_next   = 6'b000000;
+                end 
+    endcase
+    end
+end
+
+assign LED = LED_reg;
+
+
+    
+endmodule
+
