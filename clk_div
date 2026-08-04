@@ -1,0 +1,28 @@
+
+module clk_div (
+    input wire clk_sys, // 100MHz
+    input wire aresetn,
+
+    output reg clk_out  // Sửa thành output reg để gán được trong always
+);
+
+    parameter N = 25'd25000000 - 1'd1;
+    reg [24:0] counter;
+
+    always @(posedge clk_sys or negedge aresetn) begin
+        if (~aresetn) begin
+            counter <= 25'd0;
+            clk_out <= 1'b0;
+        end 
+        else begin
+            if (counter < N) begin
+                counter <= counter + 1'd1;
+            end
+            else begin 
+                clk_out <= ~clk_out;
+                counter <= 25'd0;
+            end
+        end 
+    end
+    
+endmodule
