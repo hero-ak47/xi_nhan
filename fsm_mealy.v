@@ -3,7 +3,7 @@ module xi_nhan (
     input wire aresetn,
     input wire switch, // 0 : LEFT & 1 : RIGHT
 
-    output wire[5:0] LED
+    output reg[5:0] LED
 );
 
 reg[2:0] state_reg, state_next;
@@ -31,7 +31,7 @@ always @(*) begin
     case (state_reg)
 
         IDLE: begin
-            LED_next   = 6'b000000;
+            LED   = 6'b000000;
             state_next = STEP1;
             end
 
