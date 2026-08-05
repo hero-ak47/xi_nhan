@@ -3,7 +3,7 @@ module top_module (
     input wire aresetn,
     input wire switch,
 
-    output reg[5:0] LED
+    output wire[5:0] LED
 );
 
 wire clk_2Hz;
